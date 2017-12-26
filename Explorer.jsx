@@ -45,8 +45,6 @@ class Explorer extends React.Component {
       getDefaultFieldNames: null
     }
 
-    //logIn = this.logIn.bind(this);
-
   }
 
   handleClickPrettifyButton(event) {
@@ -64,8 +62,7 @@ class Explorer extends React.Component {
       headers: { 'Content-Type': 'application/json',
                  'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMTMwNjk0ODYiLCJuYmYiOjE1MTQyMTc3MDAsImV4cCI6MTUxNDMwNDEwMCwiaWF0IjoxNTE0MjE3NzAwLCJpc3MiOiJ1cm46dGVsLWF2aXY6YXBpIiwiYXVkIjoiZGlnaXRlbCJ9.QfmAOqDDiwgAfhan3LtFPU0jq8iG921IDfA9w3lfUPQ'
                },
-      body: '{"query":"{  customer  {    id    lastName    firstName  }}","variables":"{}","operationName":null}'
-      // JSON.stringify(graphQLParams),
+      body: JSON.stringify(graphQLParams)
     }).then(response => {
       return response.json()
     });
@@ -74,7 +71,7 @@ class Explorer extends React.Component {
 
   render() {
     return(<div className='graphiql-ide'>
-            <GraphiQL
+            <GraphiQL schema={null}
                       ref={c => { this.graphiql = c; }} {...this.state}
                       fetcher={this.graphQLFetcher}
                       editorTheme="solarized light">
@@ -83,18 +80,9 @@ class Explorer extends React.Component {
                   <GraphiQL.Button
                     onClick={this.handleClickPrettifyButton}
                     label="Prettify"
-                    title="Prettify Query (Shift-Ctrl-P)"
+                    title="Prettify Query"
                   />
-                  <button className='toolbar-button' onClick={this.logIn}>Log In</button>
               </GraphiQL.Toolbar>
-              <GraphiQL.QueryEditor>
-              </GraphiQL.QueryEditor>
-              <GraphiQL.VariableEditor>
-              </GraphiQL.VariableEditor>
-              <GraphiQL.ResultViewer>
-              </GraphiQL.ResultViewer>
-              <GraphiQL.Footer>
-              </GraphiQL.Footer>
             </GraphiQL>
       </div>);
   }
