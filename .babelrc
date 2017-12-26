@@ -1,0 +1,13 @@
+{
+  "presets" : [
+      "es2015", "react",
+    ],
+    "plugins": [
+      [
+        "css-modules-transform", {
+          "extensions": [".css", ".scss"],
+          "devMode": true
+        }
+      ]
+    ]
+}
