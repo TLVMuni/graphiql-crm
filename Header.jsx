@@ -29,26 +29,12 @@ class Header extends React.Component<Props, State> {
 
     this.loginButton = {};
 
-    this.logIn = this.logIn.bind(this);
     this.loginStatusChanged = this.loginStatusChanged.bind(this);
-  }
-
-  logIn() {
-
-    this.setState({
-      loggedIn: !this.state.loggedIn
-    });
-
-    this.props.dispatch({
-      type: 'LOGGED_IN',
-      data: true
-    });
-
   }
 
   loginStatusChanged(status) {
 
-    const authHeader = this.loginButton.getAuthorizationHeader();
+    const closure = this.loginButton.getAuthorizationHeader;
     const logText = status ? 'Log Out' : 'Log In';
 
     this.setState({
@@ -60,15 +46,13 @@ class Header extends React.Component<Props, State> {
       type: 'LOGGED_IN',
       data: {
           status: status,
-          authHeader: authHeader
+          getAuthHeaderClosure: closure
         }
     });
 
   }
 
   render() {
-
-    let buttonText = (this.state.loggedIn)? 'Log Out' : 'Log In';
 
     return (<div>
               <div className='header TableObject'>
