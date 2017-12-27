@@ -1,5 +1,9 @@
+// @flow
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import GraphiQL from 'graphiql';
+import classnames from 'classnames';
 
 class Explorer extends React.Component {
 
@@ -42,7 +46,8 @@ class Explorer extends React.Component {
       // does not provide them. Change this if your GraphQL Definitions
       // should behave differently than what's defined here:
       // (https://github.com/graphql/graphiql/blob/master/src/utility/fillLeafs.js#L75)
-      getDefaultFieldNames: null
+      getDefaultFieldNames: null,
+
     }
 
   }
@@ -60,7 +65,7 @@ class Explorer extends React.Component {
     return fetch('http://localhost:3001/graphql?', {
       method: 'post',
       headers: { 'Content-Type': 'application/json',
-                 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMTMwNjk0ODYiLCJuYmYiOjE1MTQyMTc3MDAsImV4cCI6MTUxNDMwNDEwMCwiaWF0IjoxNTE0MjE3NzAwLCJpc3MiOiJ1cm46dGVsLWF2aXY6YXBpIiwiYXVkIjoiZGlnaXRlbCJ9.QfmAOqDDiwgAfhan3LtFPU0jq8iG921IDfA9w3lfUPQ'
+                 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMTMwNjk0ODYiLCJuYmYiOjE1MTQzMDgzODcsImV4cCI6MTUxNDM5NDc4NywiaWF0IjoxNTE0MzA4Mzg3LCJpc3MiOiJ1cm46dGVsLWF2aXY6YXBpIiwiYXVkIjoiZGlnaXRlbCJ9.OsRjCkRX_momn7N9gIZSBiJgGq0pwz_4o1uJvP9qowI'
                },
       body: JSON.stringify(graphQLParams)
     }).then(response => {
@@ -70,7 +75,13 @@ class Explorer extends React.Component {
   }
 
   render() {
-    return(<div className='graphiql-ide'>
+
+    let explorerClass = classnames({
+        'graphiql-ide': true,
+        'signed-out' : !this.props.enabled
+    })
+
+    return(<div className={explorerClass}>
             <GraphiQL schema={null}
                       ref={c => { this.graphiql = c; }} {...this.state}
                       fetcher={this.graphQLFetcher}
@@ -89,4 +100,14 @@ class Explorer extends React.Component {
 
 };
 
-export default Explorer;
+Explorer.propTypes = {
+  enabled: PropTypes.bool.isRequired
+}
+
+function mapStateToProps(state) {
+  return {
+    enabled: state.loggedIn
+  };
+};
+
+export default connect(mapStateToProps)(Explorer);
