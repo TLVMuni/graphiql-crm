@@ -1,25 +1,74 @@
 // @flow
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { connect } from 'react-redux';
 
-class Header extends React.Component {
+import LoginButton from './LoginButton';
+
+type Props = {
+  text: string,
+};
+
+type State = {
+  loggedIn: Boolean
+}
+
+class Header extends React.Component<Props, State> {
+
+  /*state = {
+    loggedIn: false
+  };*/
 
   constructor(props) {
 
     super(props);
 
+    this.state = {
+      loggedIn: false,
+      loginStatus: "Log In"
+    }
+
+    this.loginButton = {};
+
     this.logIn = this.logIn.bind(this);
+    this.loginStatusChanged = this.loginStatusChanged.bind(this);
   }
 
   logIn() {
+
+    this.setState({
+      loggedIn: !this.state.loggedIn
+    });
+
     this.props.dispatch({
       type: 'LOGGED_IN',
       data: true
     });
+
+  }
+
+  loginStatusChanged(status) {
+
+    const authHeader = this.loginButton.getAuthorizationHeader();
+    const logText = status ? 'Log Out' : 'Log In';
+
+    this.setState({
+      loggedIn: status,
+      loginStatus: logText
+    });
+
+    this.props.dispatch({
+      type: 'LOGGED_IN',
+      data: {
+          status: status,
+          authHeader: authHeader
+        }
+    });
+
   }
 
   render() {
+
+    let buttonText = (this.state.loggedIn)? 'Log Out' : 'Log In';
 
     return (<div>
               <div className='header TableObject'>
@@ -28,10 +77,9 @@ class Header extends React.Component {
                 </div>
                 <div className='TableObject-item text-right'>
                   <span>{this.props.text}</span>
-                  <a onClick={this.logIn}
-                      className='btn btn-sm btn-primary ml-2' target='_blank' href=''>
-                    Log In
-                  </a>
+                  <LoginButton text={this.state.loginStatus}
+                      ref={ c => { this.loginButton = c; }}
+                      onStatusChange={this.loginStatusChanged} />
                 </div>
               </div>
               <div className='Box-row Box-row-yellow'>
@@ -44,9 +92,5 @@ class Header extends React.Component {
   }
 
 };
-
-Header.propTypes = {
-  text: PropTypes.string.isRequired
-}
 
 export default connect()(Header);
