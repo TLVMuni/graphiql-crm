@@ -137,8 +137,19 @@ ol ol, ul ol {
   height: 600px;
   border-top: 1px solid #e0e0e0;
 }
-.graphiql-ide .signed-out {
-  position: relative;
+.graphiql-ide.signed-out {
+    position: relative
+}
+.graphiql-ide.signed-out:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    content: " ";
+    background: #ddd;
+    opacity: .5
 }
 
 .graphiql-container .variable-editor {
