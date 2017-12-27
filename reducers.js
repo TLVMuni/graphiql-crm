@@ -1,8 +1,9 @@
 import _ from 'lodash';
 
 const INITIAL_STATE = {
-  loggedIn: false,
-  jwt: {}
+  loggedIn: false
+  //authHeader: {},
+  //authHeaderClosure: {}
 };
 
 const reducers = (state = INITIAL_STATE, action) => {
@@ -12,7 +13,7 @@ const reducers = (state = INITIAL_STATE, action) => {
     case 'LOGGED_IN':
       state = _.assign({}, state, {
                                     loggedIn: action.data.status,
-                                    authHeader: action.data.authHeader
+                                    authHeaderClosure: action.data.getAuthHeaderClosure
                                   });
       break;
 
