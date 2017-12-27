@@ -1,17 +1,22 @@
+// @flow
 import React from 'react';
-
-import styles from '../css/header.css'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Header extends React.Component {
 
   constructor(props) {
 
     super(props);
+
+    this.logIn = this.logIn.bind(this);
   }
 
   logIn() {
-    console.log('Login');
-    //this.jwt = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMTMwNjk0ODYiLCJuYmYiOjE1MTQyMTc3MDAsImV4cCI6MTUxNDMwNDEwMCwiaWF0IjoxNTE0MjE3NzAwLCJpc3MiOiJ1cm46dGVsLWF2aXY6YXBpIiwiYXVkIjoiZGlnaXRlbCJ9.QfmAOqDDiwgAfhan3LtFPU0jq8iG921IDfA9w3lfUPQ'
+    this.props.dispatch({
+      type: 'LOGGED_IN',
+      data: true
+    });
   }
 
   render() {
@@ -22,8 +27,9 @@ class Header extends React.Component {
                   <h3>TLV GraphQL API</h3>
                 </div>
                 <div className='TableObject-item text-right'>
-                  <span>Start exploring GraphQL API queries using your Digitel account now</span>
-                  <a className='btn btn-sm btn-primary ml-2' target='_blank' href='/login'>
+                  <span>{this.props.text}</span>
+                  <a onClick={this.logIn}
+                      className='btn btn-sm btn-primary ml-2' target='_blank' href=''>
                     Log In
                   </a>
                 </div>
@@ -39,4 +45,8 @@ class Header extends React.Component {
 
 };
 
-export default Header;
+Header.propTypes = {
+  text: PropTypes.string.isRequired
+}
+
+export default connect()(Header);
