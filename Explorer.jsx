@@ -1,18 +1,18 @@
 // @flow
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import GraphiQL from 'graphiql';
 import classnames from 'classnames';
 
-class Explorer extends React.Component {
+type Props = {
+  enabled: Boolean
+}
+
+class Explorer extends React.Component<Props> {
 
   constructor(props) {
-    super(props);
 
     super(props);
-
-    this.jwt = {};
 
     this.state = {
 
@@ -50,6 +50,8 @@ class Explorer extends React.Component {
 
     }
 
+    this.graphQLFetcher = this.graphQLFetcher.bind(this);
+
   }
 
   handleClickPrettifyButton(event) {
@@ -62,10 +64,12 @@ class Explorer extends React.Component {
 
   graphQLFetcher(graphQLParams) {
 
+    const authHeader = this.props.authHeader;
+
     return fetch('http://localhost:3001/graphql?', {
       method: 'post',
       headers: { 'Content-Type': 'application/json',
-                 'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMTMwNjk0ODYiLCJuYmYiOjE1MTQzMDgzODcsImV4cCI6MTUxNDM5NDc4NywiaWF0IjoxNTE0MzA4Mzg3LCJpc3MiOiJ1cm46dGVsLWF2aXY6YXBpIiwiYXVkIjoiZGlnaXRlbCJ9.OsRjCkRX_momn7N9gIZSBiJgGq0pwz_4o1uJvP9qowI'
+                 'Authorization': authHeader// 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMTMwNjk0ODYiLCJuYmYiOjE1MTQzMDgzODcsImV4cCI6MTUxNDM5NDc4NywiaWF0IjoxNTE0MzA4Mzg3LCJpc3MiOiJ1cm46dGVsLWF2aXY6YXBpIiwiYXVkIjoiZGlnaXRlbCJ9.OsRjCkRX_momn7N9gIZSBiJgGq0pwz_4o1uJvP9qowI'
                },
       body: JSON.stringify(graphQLParams)
     }).then(response => {
@@ -100,13 +104,11 @@ class Explorer extends React.Component {
 
 };
 
-Explorer.propTypes = {
-  enabled: PropTypes.bool.isRequired
-}
 
 function mapStateToProps(state) {
   return {
-    enabled: state.loggedIn
+    enabled: state.loggedIn,
+    authHeader: state.authHeader
   };
 };
 
