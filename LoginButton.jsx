@@ -33,7 +33,7 @@ class LoginButton extends React.Component{
     window.addEventListener("message", (event) => {
                                                 if( event.data.access_token ) {
                                                     self.jwt = event.data;
-                                                    self.tokenExpire = jwtDecode(event.data).exp;
+                                                    self.tokenExpire = jwtDecode(event.data.access_token).exp;
                                                     self.setState({
                                                       loginStatus: true,
                                                       buttonDisabled: 'disabled',
@@ -67,13 +67,6 @@ class LoginButton extends React.Component{
           });
           var popup = window.open('https://tlvauth.azurewebsites.net/logintoken.html', '_blank' ,false );
 
-
-            popup.addEventListener('unload', function(event) {
-                popup.alert("Thank you for visiting W3Schools!");
-              });
-
-
-          // popup.addEventListener("unload", popup.alert("visiting W3Schools!"));
       }
       else {
           //log out
