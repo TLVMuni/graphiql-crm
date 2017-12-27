@@ -23,7 +23,7 @@ class LoginButton extends React.Component{
     this.tokenExpire = null;
 
     this.buttonHandler = this.buttonHandler.bind(this);
-    this.getToken = this.getToken.bind(this);
+    this.getAuthorizationHeader = this.getAuthorizationHeader.bind(this);
   }
 
   componentDidMount(){
@@ -45,14 +45,12 @@ class LoginButton extends React.Component{
   }
 
 
-  getToken(){
+  getAuthorizationHeader(){
     if (this.jwt) {
       var time = moment().unix();
-        if (time > this.tokenExpire - SAFETY_TIME) {
-            return this.jwt.access_token;
-        }
-        //token expire
-        else {
+        if (time < this.tokenExpire - SAFETY_TIME) {
+            return this.jwt.token_type + ' ' + this.jwt.access_token;
+        }  else { //token expired
           return null;
         }
     }
