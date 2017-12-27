@@ -64,7 +64,10 @@ class Explorer extends React.Component<Props> {
 
   graphQLFetcher(graphQLParams) {
 
-    const authHeader = this.props.authHeader;
+    if( !this.props.authHeaderClosure )
+      return;
+
+    const authHeader = this.props.authHeaderClosure();
 
     return fetch('http://localhost:3001/graphql?', {
       method: 'post',
@@ -108,7 +111,8 @@ class Explorer extends React.Component<Props> {
 function mapStateToProps(state) {
   return {
     enabled: state.loggedIn,
-    authHeader: state.authHeader
+    //authHeader: state.authHeader,
+    authHeaderClosure: state.authHeaderClosure
   };
 };
 
